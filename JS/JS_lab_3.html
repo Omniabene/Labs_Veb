@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+</head>
+<body>
+<input type="button" id="createTable" value="Создать таблицу" onclick="checkTable()" />
+<input type="button" id="createRow" value="Добавить строку" onclick="addRow()" />
+<input type="button" id="deleteRow" value="Удалить строку №" onclick="deleteRow()" />
+<label>
+    <input type="text" id="deleteNumber" />
+</label>
+
+<style>
+    table td{
+        padding: 20px;
+        border: 1px solid black;
+
+    }
+</style>
+
+<div id="elem"></div>
+
+
+
+<script>
+    let f = 0;
+    document.querySelector('#createRow').setAttribute('disabled', true);
+    document.querySelector('#deleteRow').setAttribute('disabled', true);
+    document.querySelector('#deleteNumber').setAttribute('disabled', true);
+    let cols=2;
+    let rows=3;
+    let number;
+    let totalRows=rows;
+
+    function checkTable(){
+        if (f===1){
+            alert('Таблица уже создана')
+        }else {
+            f++;
+            document.querySelector('#createRow').removeAttribute('disabled');
+            document.querySelector('#deleteRow').removeAttribute('disabled');
+            document.querySelector('#deleteNumber').removeAttribute('disabled');
+            createTable(elem, cols, rows);
+
+            function createTable(parent, cols, rows) {
+                const table = document.createElement('table');
+                table.id = 'myTable';
+
+                for (let i = 0; i < rows; i++) {
+                    const tr = document.createElement('tr');
+
+                    for (let j = 0; j < cols; j++) {
+                        const td = document.createElement('td');
+                        tr.appendChild(td);
+                        if (j === 0) {
+                            td.innerText = String(i+1);
+                            td.className ="numbering";
+                        }else{
+                            td.innerText = String(i+1);
+                        }
+                    }
+                    table.appendChild(tr);
+                }
+                parent.appendChild(table);
+            }
+        }
+    }
+
+    function addRow() {
+        const table = document.getElementById('myTable');
+        const row = table.insertRow(rows);
+        rows++;
+        totalRows++;
+        for (let i = 0; i < cols; i++) {
+            const cell = row.insertCell(i);
+            if (i===0){
+                cell.innerText = String(rows);
+            }else{
+                cell.innerText = String(totalRows);
+            }
+        }
+    }
+    function deleteRow(){
+        const table = document.getElementById('myTable');
+        number = document.getElementById('deleteNumber');
+        if (isNaN(number.value)||Number.isInteger(number.value)){
+            alert("Это не целое число");
+            return;
+        }
+        if (number.value<=0||number.value>rows){
+            alert("Такого номера строки не существует");
+            return;
+        }
+        table.deleteRow(number.value-1);
+        rows--;
+        for (let i = 0; i < rows; i++) {
+            table.rows[i].cells[0].innerText=String(i+1);
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>
